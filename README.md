@@ -4,7 +4,7 @@ This repository contains web applications that interact with Bluesky's WebSocket
 
 ## Projects
 
-### 1. Bluesky FM
+### 1. BlueskyFM
 
 A real-time music discovery tool that monitors Bluesky's network for Spotify links. The application creates a live feed of tracks, albums, and playlists being shared across the Bluesky social network.
 
@@ -41,4 +41,4 @@ These applications utilize Bluesky's WebSocket endpoint at `wss://jetstream2.us-
 
 ## Credits
 
-Bluesky FM was built by Si Quick with inspiration from Simon Willison.
+BlueskyFM was built by Si Quick with inspiration from Simon Willison.

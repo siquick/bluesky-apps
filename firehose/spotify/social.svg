@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <!-- Background -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#191414;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0F0F0F;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1DB954" />
+      <stop offset="100%" style="stop-color:#0085FF" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main background -->
+  <rect width="1200" height="630" fill="url(#bg-gradient)" />
+  
+  <!-- Decorative waves -->
+  <path d="M0,450 C300,400 600,500 1200,450 L1200,630 L0,630 Z" 
+        fill="#1DB954" opacity="0.1" />
+  <path d="M0,500 C400,450 800,550 1200,500 L1200,630 L0,630 Z" 
+        fill="#0085FF" opacity="0.1" />
+
+  <!-- Main title -->
+  <text x="600" y="250" 
+        font-family="Public Sans, sans-serif" 
+        font-size="120" 
+        font-weight="700"
+        text-anchor="middle" 
+        fill="url(#accent-gradient)">
+    Bluesky FM
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="350" 
+        font-family="Public Sans, sans-serif" 
+        font-size="36" 
+        text-anchor="middle" 
+        fill="#FFFFFF" 
+        opacity="0.8">
+    Live Music Feed
+  </text>
+
+  <!-- Music note icon -->
+  <g transform="translate(520,180) scale(0.8)">
+    <path d="M80 20 A50 50 0 1 1 80 120" 
+          stroke="url(#accent-gradient)" 
+          stroke-width="12" 
+          fill="none" 
+          stroke-linecap="round"/>
+    <circle cx="80" cy="120" r="20" fill="url(#accent-gradient)"/>
+  </g>
+
+  <!-- Play icon -->
+  <g transform="translate(620,180) scale(0.8)">
+    <circle cx="50" cy="50" r="40" 
+            stroke="url(#accent-gradient)" 
+            stroke-width="4" 
+            fill="none"/>
+    <path d="M35,30 L75,50 L35,70 Z" 
+          fill="url(#accent-gradient)"/>
+  </g>
+
+  <!-- Decorative circles -->
+  <circle cx="200" cy="150" r="100" fill="url(#accent-gradient)" opacity="0.05"/>
+  <circle cx="1000" cy="450" r="150" fill="url(#accent-gradient)" opacity="0.05"/>
+
+  <!-- Bottom text -->
+  <text x="600" y="450" 
+        font-family="Public Sans, sans-serif" 
+        font-size="24" 
+        text-anchor="middle" 
+        fill="#FFFFFF" 
+        opacity="0.6">
+    Discover what music the Bluesky community is sharing in real-time
+  </text>
+</svg>
