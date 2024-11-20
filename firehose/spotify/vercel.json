@@ -7,6 +7,10 @@
 		{
 			"source": "/social.svg",
 			"destination": "/social.svg"
+		},
+		{
+			"source": "/social.png",
+			"destination": "/social.png"
 		}
 	]
 }
