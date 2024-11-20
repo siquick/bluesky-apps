@@ -3,6 +3,10 @@
 		{
 			"source": "/",
 			"destination": "/index.html"
+		},
+		{
+			"source": "/social.svg",
+			"destination": "/social.svg"
 		}
 	]
 }
