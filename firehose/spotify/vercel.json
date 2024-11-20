@@ -11,6 +11,10 @@
 		{
 			"source": "/social.png",
 			"destination": "/social.png"
+		},
+		{
+			"source": "/styles.css",
+			"destination": "/styles.css"
 		}
 	]
 }
