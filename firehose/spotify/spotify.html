@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bluesky FM • Live Music Feed</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --spotify-green: #1db954;
+        --spotify-black: #191414;
+        --bluesky-blue: #0085ff;
+        --text-primary: #ffffff;
+        --text-secondary: rgba(255, 255, 255, 0.7);
+        --surface-dark: #282828;
+        --surface-darker: #181818;
+        --accent-gradient: linear-gradient(135deg, var(--spotify-green), var(--bluesky-blue));
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Public Sans", system-ui, -apple-system, sans-serif;
+        background: var(--spotify-black);
+        color: var(--text-primary);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .hero {
+        text-align: center;
+        padding: 4rem 1rem;
+        background: var(--surface-darker);
+        border-radius: 24px;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--accent-gradient);
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: var(--accent-gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      a {
+        color: var(--text-secondary);
+      }
+
+      .hero p {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto 2rem auto;
+      }
+
+      .controls {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin-bottom: 2rem;
+      }
+
+      button {
+        padding: 12px 24px;
+        border-radius: 50px;
+        border: none;
+        font-family: inherit;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: var(--text-primary);
+      }
+
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      #connect {
+        background: var(--spotify-green);
+      }
+
+      #disconnect {
+        background: #e91429;
+      }
+
+      #clear {
+        background: var(--surface-dark);
+      }
+
+      button:hover:not(:disabled) {
+        transform: translateY(-2px);
+      }
+
+      .status-bar {
+        background: var(--surface-dark);
+        padding: 1rem;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      .status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .status::before {
+        content: "";
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #e91429;
+      }
+
+      .status.connected::before {
+        background: var(--spotify-green);
+      }
+
+      .stats {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+      }
+
+      .stats span {
+        color: var(--text-primary);
+        font-weight: 600;
+      }
+
+      .spotify-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 24px;
+        padding: 1rem 0;
+      }
+
+      .spotify-card {
+        background: var(--surface-dark);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.2s ease;
+      }
+
+      .spotify-card:hover {
+        transform: translateY(-4px);
+      }
+
+      .spotify-container {
+        position: relative;
+      }
+
+      .spotify-container iframe {
+        border-radius: 12px;
+        width: 100%;
+        height: 152px;
+      }
+
+      .player-info {
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .type-badge {
+        padding: 4px 12px;
+        border-radius: 50px;
+        background: var(--spotify-black);
+        color: var(--spotify-green);
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .post-link {
+        color: var(--bluesky-blue);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.2s ease;
+      }
+
+      .post-link:hover {
+        color: var(--text-primary);
+      }
+
+      .empty-state {
+        text-align: center;
+        color: var(--text-secondary);
+        padding: 4rem 1rem;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .hero {
+          padding: 2rem 1rem;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+
+        .status-bar {
+          flex-direction: column;
+          gap: 1rem;
+          text-align: center;
+        }
+
+        .spotify-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="hero">
+        <h1>Bluesky FM</h1>
+        <p>
+          Discover music shared across the Bluesky network in real-time. We monitor the firehose for Spotify links and
+          instantly create a live feed of tracks, albums, and playlists being discussed right now.
+        </p>
+        <p>
+          Built by
+          <a href="https://bsky.app/profile/siquick.com" target="_blank" rel="noopener noreferrer">Si Quick</a> with
+          inspiration from
+          <a href="https://bsky.app/profile/simonwillison.net" target="_blank" rel="noopener noreferrer"
+            >Simon Willison</a
+          >.
+        </p>
+      </div>
+
+      <div class="status-bar">
+        <div class="status disconnected">Not Connected</div>
+        <div class="stats">
+          Posts scanned: <span id="post-count">0</span> • Spotify links found: <span id="spotify-count">0</span>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="connect">Connect to Feed</button>
+        <button id="disconnect" disabled>Disconnect</button>
+        <button id="clear">Clear All</button>
+      </div>
+
+      <div id="spotify-grid" class="spotify-grid">
+        <div class="empty-state">Connect to start discovering music shared on Bluesky</div>
+      </div>
+    </div>
+
+    <script>
+      let ws = null;
+      let reconnectAttempts = 0;
+      let postsScanned = 0;
+      let spotifyFound = 0;
+      const MAX_RECONNECT_ATTEMPTS = 3;
+      const MAX_PLAYERS = 50;
+
+      const connectBtn = document.getElementById("connect");
+      const disconnectBtn = document.getElementById("disconnect");
+      const clearBtn = document.getElementById("clear");
+      const statusDiv = document.querySelector(".status");
+      const spotifyGrid = document.getElementById("spotify-grid");
+      const postCountSpan = document.getElementById("post-count");
+      const spotifyCountSpan = document.getElementById("spotify-count");
+
+      function updateStatus(connected) {
+        statusDiv.textContent = connected ? "Connected" : "Not Connected";
+        statusDiv.className = `status ${connected ? "connected" : "disconnected"}`;
+        connectBtn.disabled = connected;
+        disconnectBtn.disabled = !connected;
+      }
+
+      function updateStats() {
+        postCountSpan.textContent = postsScanned;
+        spotifyCountSpan.textContent = spotifyFound;
+      }
+
+      function extractSpotifyInfo(url) {
+        const patterns = [
+          /open\.spotify\.com\/(track|album|playlist|artist)\/([a-zA-Z0-9]+)/,
+          /spotify:(track|album|playlist|artist):([a-zA-Z0-9]+)/,
+        ];
+
+        for (const pattern of patterns) {
+          const match = url.match(pattern);
+          if (match) {
+            return {
+              type: match[1],
+              id: match[2],
+            };
+          }
+        }
+        return null;
+      }
+
+      function addSpotifyEmbed(spotifyInfo, postUrl) {
+        if (spotifyFound === 0) {
+          spotifyGrid.innerHTML = ""; // Clear empty state
+        }
+
+        if (spotifyFound >= MAX_PLAYERS) {
+          const firstPlayer = spotifyGrid.firstChild;
+          if (firstPlayer) {
+            spotifyGrid.removeChild(firstPlayer);
+          }
+        }
+
+        const card = document.createElement("div");
+        card.className = "spotify-card";
+
+        const embedUrl = `https://open.spotify.com/embed/${spotifyInfo.type}/${spotifyInfo.id}`;
+
+        card.innerHTML = `
+          <div class="spotify-container">
+            <iframe
+              src="${embedUrl}"
+              frameborder="0"
+              allowtransparency="true"
+              allow="encrypted-media"
+            ></iframe>
+          </div>
+          <div class="player-info">
+            <span class="type-badge">${spotifyInfo.type}</span>
+            <a href="${postUrl}" target="_blank" class="post-link">View original post</a>
+          </div>
+        `;
+
+        spotifyGrid.insertBefore(card, spotifyGrid.firstChild);
+        spotifyFound++;
+        updateStats();
+      }
+
+      function connect() {
+        if (ws) {
+          console.log("Already connected!");
+          return;
+        }
+
+        try {
+          ws = new WebSocket("wss://jetstream2.us-east.bsky.network/subscribe?wantedCollections=app.bsky.feed.post");
+
+          ws.onopen = () => {
+            console.log("Connected to Bluesky WebSocket");
+            updateStatus(true);
+          };
+
+          ws.onmessage = (event) => {
+            try {
+              const data = JSON.parse(event.data);
+              postsScanned++;
+              updateStats();
+
+              if (data.commit?.operation !== "create" || data.commit?.collection !== "app.bsky.feed.post") {
+                return;
+              }
+
+              const record = data.commit.record;
+              if (!record) return;
+
+              const postUrl = `https://bsky.app/profile/${data.did}/post/${data.commit.rkey}`;
+              let spotifyInfo = null;
+
+              if (record.embed?.$type === "app.bsky.embed.external") {
+                const embedUrl = record.embed.external.uri;
+                if (embedUrl) {
+                  spotifyInfo = extractSpotifyInfo(embedUrl);
+                }
+              }
+
+              if (!spotifyInfo && record.facets) {
+                for (const facet of record.facets) {
+                  const link = facet.features?.find((f) => f.$type === "app.bsky.richtext.facet#link");
+                  if (link?.uri) {
+                    spotifyInfo = extractSpotifyInfo(link.uri);
+                    if (spotifyInfo) break;
+                  }
+                }
+              }
+
+              if (!spotifyInfo && record.text) {
+                spotifyInfo = extractSpotifyInfo(record.text);
+              }
+
+              if (spotifyInfo) {
+                console.log("Found Spotify content:", spotifyInfo);
+                addSpotifyEmbed(spotifyInfo, postUrl);
+              }
+            } catch (e) {
+              console.error("Error processing message:", e);
+            }
+          };
+
+          ws.onerror = (error) => {
+            console.error(`WebSocket Error: ${error.message}`);
+            updateStatus(false);
+          };
+
+          ws.onclose = () => {
+            console.log("Disconnected from Bluesky WebSocket");
+            ws = null;
+            updateStatus(false);
+          };
+        } catch (error) {
+          console.error(`Connection Error: ${error.message}`);
+          ws = null;
+          updateStatus(false);
+        }
+      }
+
+      function disconnect() {
+        if (ws) {
+          ws.close();
+          ws = null;
+          updateStatus(false);
+        }
+      }
+
+      function clearPlayers() {
+        spotifyGrid.innerHTML = `
+          <div class="empty-state">
+            Connect to start discovering music shared on Bluesky
+          </div>
+        `;
+        spotifyFound = 0;
+        updateStats();
+      }
+
+      connectBtn.addEventListener("click", connect);
+      disconnectBtn.addEventListener("click", disconnect);
+      clearBtn.addEventListener("click", clearPlayers);
+    </script>
+  </body>
+</html>
